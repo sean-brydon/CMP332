@@ -43,7 +43,7 @@ class MovieController
             $result = $this->_movieGateway->findAll();
             if (!count($result) > 0) return ResponseController::SuccessResponse('There are no movies in the database', 200, null, false);
             $returnData = array();
-            echo(count($result));
+            print_r($result);
             $returnData['rows_returned'] = count($result);
             $returnData['movies'] = $result;
 

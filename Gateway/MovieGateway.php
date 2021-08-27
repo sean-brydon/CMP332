@@ -18,14 +18,12 @@ class MovieGateway
         $query = $this->_dbConnection->prepare("SELECT * from tblMovies");
         /* $query = $this->_dbConnection->prepare("SELECT id,title,ageRating,movieRating,releaseDate,description,genre,director,DATE_FORMAT(createdAt,'%Y-%m-%d') as 'createdAt', DATE_FORMAT(updatedAt,'%Y-%m-%d') as 'updatedAt' from tblMovies"); */
         $result = $query->fetchAll();
-        $movies= array();
-        array_push($movies,$result);
         /* var_dump($movies); */
         /* foreach ($result as $movie) { */
         /*     $tmpMovies= new Movie($movie['id'],$movie['title'],$movie['ageRating'],$movie['movieRating'],$movie['releaseDate'],$movie['description'],$movie['genre'],$movie['director']);  */
         /*     array_push($movies, $tmpMovies); */
         /* } */
-        return $movies;
+        return $result;
     }
 
   public function insertOne() {

@@ -27,5 +27,13 @@ class UserGateway
         return $users;
     }
 
+    public function findOne(): User{
+
+        $query = $this->_dbConnection->prepare("SELECT id,username,email,password,DATE_FORMAT(createdAt,'%Y-%m-%d') as 'createdAt', DATE_FORMAT(updatedAt,'%Y-%m-%d') as 'updatedAt' from user WHERE username=?");
+        $result = $query->fetchAll()[0];
+        //return a single user
+        return new User($result['id'], $result['username'], $result['email'], $result['password'], $result['createdAt'], $result['updatedAt']); 
+    }
+
 
 }

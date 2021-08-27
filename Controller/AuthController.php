@@ -41,4 +41,5 @@ class AuthController {
     public function register(){
         $this->handleRequest();
     }
+
 }

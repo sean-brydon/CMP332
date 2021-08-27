@@ -23,4 +23,6 @@ class AuthManager
     public function DecodeJWT($jwt){
         return JWT::decode($jwt, self::JWT_PRIVATE_KEY);
     }
+
+
 }

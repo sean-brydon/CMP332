@@ -24,10 +24,18 @@ class Helpers
     } 
 
     public static function CheckAuth(){
-        $decodedJWT = AuthManager::DecodeJWT();
+        // We try and catch here to ensure token isnt expired or invalid
+        try{
+            $decodedJWT = AuthManager::DecodeJWT();
+        }catch(Exception $e){
+            return false;
+        }
+
+// If no token retrn false
         if(empty($decodedJWT)){
             return false;
         }
+        
         return true;
     }
 }

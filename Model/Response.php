@@ -121,11 +121,24 @@ class Response
         }
         // Return array as json
         if ($xmlBool) {
-            $xml = new SimpleXMLElement('<root/>');
-            array_walk_recursive($this->_responseData, array($xml, 'addChild'));
-            echo $xml->asXML();
+            echo $this->arrayToXML($this->_responseData);
         } else {
             echo json_encode($this->_responseData);
         }
     }
+
+    private  function arrayToXML($array) 
+    { 
+        $xml = '';
+        foreach ($array as $key => $value) {
+            if (is_array($value)) {
+                $xml .= "<$key>";
+                $xml .= $this->arrayToXML($value);
+                $xml .= "</$key>";
+            } else {
+                $xml .= "<$key>$value</$key>";
+            }
+        }
+        return $xml;
+    } 
 }

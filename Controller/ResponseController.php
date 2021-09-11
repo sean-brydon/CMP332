@@ -15,13 +15,13 @@ class ResponseController
         $messages = array();
         array_push($messages,$message);
         $response = new Response(false,$httpStatusCode,$messages,null,false);
-        $response->send();
+        $response->send(array_key_exists('xml', $_GET));
     }
 
     public static function SuccessResponse($message="message",$httpStatusCode=200,$data,$cache=false) {
         $messages = array();
         array_push($messages,$message);
         $response = new Response(true,$httpStatusCode,$messages,$data,$cache);
-        $response->send();
+        $response->send(array_key_exists('xml', $_GET));
     }
 }

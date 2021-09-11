@@ -8,7 +8,7 @@ class Helpers
         return DateTime::createFromFormat($format, $date);
     }
    
-    // Create comments to explain the code in this file
+    
     public function arrayToXML($array) { 
         $xml = '';
         foreach ($array as $key => $value) {

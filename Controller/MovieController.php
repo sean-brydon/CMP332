@@ -21,19 +21,21 @@ class MovieController
       $uri = explode('/', $uri);
         switch ($this->_requestMethod) {
             case 'GET':
-    // TODO: Implement checking for to see if there is an id in the query array
-                 
-                $this->findAll(); 
+                if(isset($uri[3])) {
+                    $this->findById($uri[3]);
+                } else{
+                  $this->findAll(); 
+                }
                 break;
             case 'POST':
-                $this->insertOne(); 
+                $this->insertOne($this->postDataToMovie()); 
                 break;
             case 'PUT':
-                echo('User Put');
+                $this->updateOne($uri[3],$this->postDataToMovie());
 
                 break;
             case 'DELETE':
-                echo('User Delete');
+                $this->delete($uri[3]);
                 break;
             default:
                 ResponseController::ErrorResponse("This endpoint does not take this request method");
@@ -58,14 +60,29 @@ class MovieController
         }
     }
 
-  public function insertOne()
+     public function findById($id)
+    {
+        try {
+            $result = $this->_movieGateway->find($id);
+            if (!count($result) > 0) return ResponseController::SuccessResponse('There are no movies in the database with this ID', 200, null, false);
+            $returnData = array();
+            $returnData['movies'] = $result;
+
+            ResponseController::SuccessResponse("Success", 200, $returnData, true);
+
+            // These exceptions would normally not be merged however since this is a find all - It will be a server error if one of the validations fail.
+        } catch (PDOException $PDOException) {
+            ResponseController::ErrorResponse("There has been an error", 500);
+        }
+    }
+
+  public function insertOne($movie)
   {
     try{
-      $movie = $this->postDataToMovie();
       $result = $this->_movieGateway->insert($movie);
       if(!$result)return  ResponseController::ErrorResponse("There has been an error with inserting data into the database",404);
 
-      return ResponseController::SuccessResponse("Success",200,null,false);
+      return ResponseController::SuccessResponse("Success",200,$result,false);
 
     }catch(PDOException $expection){
       return ResponseController::ErrorResponse($expection->getMessage(),500);
@@ -77,13 +94,31 @@ class MovieController
   {
     try{
       $result = $this->_movieGateway->update($id,$movie);
-      if(!$result)return  ResponseController::ErrorResponse("There has been an error with updating data into the database",404);
-      
+      if(!$result) return  ResponseController::ErrorResponse("There was no movie with this ID",404);
+
+      return ResponseController::SuccessResponse("Success",200,$result,false);
+
+
     }catch(PDOException $expection){
       return ResponseController::ErrorResponse($expection->getMessage(),500);
 
     }
   }
+
+  public function delete($id)
+  {
+    try{
+      $result = $this->_movieGateway->delete($id);
+      if(!$result) return  ResponseController::ErrorResponse("There was no movie with this ID",404);
+      
+      return ResponseController::SuccessResponse("Success",200,$result,false);
+
+    }catch(PDOException $expection){
+      return ResponseController::ErrorResponse($expection->getMessage(),500);
+
+    }
+  }
+
 
   public function postDataToMovie() : array{
     $data = json_decode(file_get_contents('php://input'), true);

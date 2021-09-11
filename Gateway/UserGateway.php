@@ -24,13 +24,32 @@ class UserGateway
         return $users;
     }
 
-    public function findOne(): User{
+    public function findOne($username){
 
-        $query = $this->_dbConnection->prepare("SELECT id,username,email,password,DATE_FORMAT(createdAt,'%Y-%m-%d') as 'createdAt', DATE_FORMAT(updatedAt,'%Y-%m-%d') as 'updatedAt' from user WHERE username=?");
-        $result = $query->fetchAll()[0];
-        //return a single user
+        $sqlQuery = "SELECT id,username,email,password,DATE_FORMAT(createdAt,'%Y-%m-%d') as 'createdAt', DATE_FORMAT(updatedAt,'%Y-%m-%d') as 'updatedAt'  FROM user WHERE username = :username";
+        $statement = $this->_dbConnection->prepare($sqlQuery);
+        $statement->bindParam(':username', $username, PDO::PARAM_STR);
+        $statement->execute();
+        $result = $statement->fetch();
+        // if result is empty return null
+        if (empty($result)) {
+            return null;
+        }
         return new User($result['id'], $result['username'], $result['email'], $result['password'], $result['createdAt'], $result['updatedAt']); 
     }
+    
+    public function findOneById($id){
 
+        $sqlQuery = "SELECT * FROM users WHERE id = :id";
+        $statement = $this->_dbConnection->prepare($sqlQuery);
+        $statement->bindParam(':id', $id, PDO::PARAM_INT);
+        $statement->execute();
+        $result = $statement->fetch();
+        // if result is empty return null
+        if (empty($result)) {
+            return null;
+        }
+        return new User($result['id'], $result['username'], $result['email'], $result['password'], $result['createdAt'], $result['updatedAt']); 
+    }
 
 }

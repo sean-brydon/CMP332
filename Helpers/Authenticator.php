@@ -12,16 +12,22 @@ class AuthManager
         $date = new DateTime();
         $payload = array(
             "iat" => $date->getTimestamp(),
-            "sub" =>$user['id'],
-            "username" => $user['username']
+            "sub" =>$user->getId(),
+            "username" => $user->getUsername()
         );
         // return encoded jwt
         return JWT::encode($payload, self::JWT_PRIVATE_KEY);
     }
 
     // function to decode a jwt
-    public function DecodeJWT($jwt){
-        return JWT::decode($jwt, self::JWT_PRIVATE_KEY);
+    public static function DecodeJWT(){
+        if(array_key_exists('token', $_GET)){
+            $token = $_GET['token'];
+        }else{
+            return false;
+        }
+
+        return JWT::decode($token, self::JWT_PRIVATE_KEY, array('HS256'));
     }
 
 

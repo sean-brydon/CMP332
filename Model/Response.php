@@ -104,21 +104,13 @@ class Response
         }
 
         // If something is wrong with the request
-        if (($this->_success !== false && $this->_success !== true) || !is_numeric($this->_httpStatusCode)) {
-            $this->_responseData['success'] = false;
-            // Internal Service Error
-            http_response_code(500);
-            $this->_responseData['statusCode'] = 500;
-            $this->addMessage("500 Internal Server Error");
-            $this->_responseData['messages'] = $this->_messages;
-        } else {
-            // This else is always hit along as its not an external error Thus -> success = true
-            $this->_responseData['success'] = $this->_success;
-            http_response_code($this->_httpStatusCode);
-            $this->_responseData['statusCode'] = $this->_httpStatusCode;
-            $this->_responseData['messages'] = $this->_messages;
-            $this->_responseData['data'] = $this->_data;
-        }
+
+        $this->_responseData['success'] = $this->_success;
+        http_response_code($this->_httpStatusCode);
+        $this->_responseData['statusCode'] = $this->_httpStatusCode;
+        $this->_responseData['messages'] = $this->_messages;
+        $this->_responseData['data'] = $this->_data;
+        
         // Return array as json
         if ($xmlBool) {
             echo $this->arrayToXML($this->_responseData);

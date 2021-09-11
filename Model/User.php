@@ -2,13 +2,12 @@
 
 class User
 {
-    private int $_id;
-    private string $_username;
-    private string $_email;
-    private string $_password;
-    private string $_createdAt;
-    private string $_updatedAt;
-
+    private int $id;
+    private string $username;
+    private string $email;
+    private string $password;
+    private string $createdAt;
+    private string $updatedAt;
     /**
      * User constructor.
      * @param $_id
@@ -21,16 +20,16 @@ class User
     public function __construct($_id, $_username, $_email, $_password, $_createdAt = null, $_updatedAt = null)
     {
         // Using fluid setters to allow us to easily build the User in future code.
-        $this->_id = self::setId($_id)->_id;
-        $this->_username = self::setUsername($_username)->_username;
-        $this->_email = self::setEmail($_email)->_email;
-        $this->_password = self::setPassword($_password)->_password;
+        $this->id = $_id;
+        $this->username =$_username;
+        $this->email = $_email;
+        $this->password =$_password;
         // Set created at to the date and time the model is created
         // TODO - validate date
-        $this->_createdAt = $_createdAt == null ? date('Y-m-d H:i:s') : $_createdAt;
+        $this->createdAt = $_createdAt == null ? date('Y-m-d H:i:s') : $_createdAt;
         // Set updated at to the date and time the model is created - as this will be the value
         // TODO - validate date
-        $this->_updatedAt = $_updatedAt == null ? date('Y-m-d H:i:s') : $_updatedAt;
+        $this->updatedAt = $_updatedAt == null ? date('Y-m-d H:i:s') : $_updatedAt;
     }
 
     /**
@@ -39,7 +38,7 @@ class User
      */
     public function getId()
     {
-        return $this->_id;
+        return $this->id;
     }
 
     /**
@@ -48,7 +47,7 @@ class User
      */
     public function setId($id)
     {
-        $this->_id = $id;
+        $this->id = $id;
         return $this;
     }
 
@@ -57,7 +56,7 @@ class User
      */
     public function getUsername()
     {
-        return $this->_username;
+        return $this->username;
     }
 
     /**
@@ -67,11 +66,10 @@ class User
      */
     public function setUsername($username)
     {
-        if ($username === null || (strlen($username) > 5 && strlen($username) < 10)) {
-//            ResponseController::ErrorResponse("Validation Error on username", 403);
+        if ($username === null || (strlen($username) > 5 && strlen($username) < 4)) {
             throw new ValidationException($username . " does not meet the validation requirements");
         }
-        $this->_username = $username;
+        $this->username = $username;
         return $this;
     }
 
@@ -93,7 +91,7 @@ class User
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new ValidationException($email . " does not meet the validation requirements");
         }
-        $this->_email = $email;
+        $this->email = $email;
         return $this;
     }
 
@@ -102,7 +100,7 @@ class User
      */
     public function getPassword()
     {
-        return $this->_password;
+        return $this->password;
     }
 
     /**
@@ -112,10 +110,10 @@ class User
      */
     public function setPassword($password)
     {
-        if ($password === null || (strlen($password) > 5 && strlen($password) < 15)) {
+        if ($password === null || (strlen($password) > 5 && strlen($password) < 5)) {
             throw new ValidationException("Password does not meet the validation requirements");
         }
-        $this->_password = $password;
+        $this->password = $password;
         return $this;
     }
 
@@ -124,7 +122,7 @@ class User
      */
     public function getCreatedAt()
     {
-        return $this->_createdAt;
+        return $this->createdAt;
     }
 
     /**
@@ -133,7 +131,7 @@ class User
      */
     public function setCreatedAt($createdAt)
     {
-        $this->_createdAt = $createdAt;
+        $this->createdAt = $createdAt;
         return $this;
     }
 
@@ -142,7 +140,7 @@ class User
      */
     public function getUpdatedAt()
     {
-        return $this->_updatedAt;
+        return $this->updatedAt;
     }
 
     /**
@@ -151,7 +149,7 @@ class User
      */
     public function setUpdatedAt($updatedAt)
     {
-        $this->_updatedAt = $updatedAt;
+        $this->updatedAt = $updatedAt;
         return $this;
     }
 

@@ -3,6 +3,7 @@ require_once('./Gateway/UserGateway.php');
 require_once('./Controller/ResponseController.php');
 require_once('./Helpers/Post.php');
 require_once('./Helpers/Authenticator.php');
+require_once('./Model/User.php');
 
 class AuthController {
     private $_userGateway;
@@ -31,15 +32,13 @@ class AuthController {
 
         // Putting these in the same if statement would be less code but i beleive these being a guard statement makes the code more readable. 
         if(!$foundUser) return ResponseController::ErrorResponse("The username or password is incorrect");
-        if($foundUser['password'] != $PostBody['password']) return ResponseController::ErrorResponse("The username or password is incorrect");
+        if($foundUser->getPassword() != $PostBody['password']) return ResponseController::ErrorResponse("The username or password is incorrect");
 
         $jwt = $this->_authManager->IssueJWT($foundUser);
 
         return ResponseController::SuccessResponse("Success",200,array($jwt),false);
     }
 
-    public function register(){
-        $this->handleRequest();
-    }
+
 
 }

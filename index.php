@@ -1,7 +1,7 @@
 <?php
 
 use DB\DatabaseConnector;
-
+require __DIR__ . '/vendor/autoload.php';
 require_once('./Controller/MovieController.php');
 require_once('./Controller/AuthController.php');
 require_once('./DB.php');
@@ -29,9 +29,6 @@ if (array_key_exists('xml', $_GET)) {
 if (isset($uri[2])) {
   $request = $uri[2];
   switch ($request) {
-    case 'users':
-      echo ('We are in the users endpoint');
-      break;
     case 'movies':
       $movieController = new MovieController($dbConnection);
       $movieController->handleRequest();
@@ -43,11 +40,11 @@ if (isset($uri[2])) {
       switch($uri[3]){
         case 'login':
           $authController->login();
-        case 'register':
-          $authController->register();
+          break;
         default:
-          ResponseController::ErrorResponse("This route does not exist on this server.");
+         break;
       }
+      break;
     default:
       ResponseController::ErrorResponse("This route does not exist on this server.");
   }

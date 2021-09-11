@@ -1,5 +1,6 @@
 <?php
 require_once('./Gateway/MovieGateway.php');
+require_once('./Helpers/Helpers.php');
 
 
 class MovieController 
@@ -28,14 +29,26 @@ class MovieController
                 }
                 break;
             case 'POST':
-                $this->insertOne($this->postDataToMovie()); 
+                Helpers::checkAuth();
+                if(Helpers::CheckAuth()){
+                  $this->insertOne($this->postDataToMovie()); 
+                }else{
+                  return ResponseController::ErrorResponse("Unauthorized. Invalid JWT",401);
+                }
                 break;
             case 'PUT':
-                $this->updateOne($uri[3],$this->postDataToMovie());
-
+                if(Helpers::CheckAuth()){
+                  $this->updateOne($uri[3],$this->postDataToMovie());
+                }else{
+                  return ResponseController::ErrorResponse("Unauthorized. Invalid JWT",401);
+                }
                 break;
             case 'DELETE':
-                $this->delete($uri[3]);
+                if(Helpers::CheckAuth()){
+                  $this->delete($uri[3]);
+                }else{
+                  return ResponseController::ErrorResponse("Unauthorized. Invalid JWT",401);
+                }
                 break;
             default:
                 ResponseController::ErrorResponse("This endpoint does not take this request method");

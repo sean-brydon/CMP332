@@ -58,7 +58,7 @@
                 "issues": "https://github.com/firebase/php-jwt/issues",
                 "source": "https://github.com/firebase/php-jwt/tree/v5.4.0"
             },
-            "install-path": "../firebase/php-jwt"
+            "install-path": "../../../../../Users/sean4/Documents/GitHub/CMP332/vendor/firebase/php-jwt"
         }
     ],
     "dev": true,

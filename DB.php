@@ -1,31 +1,32 @@
 <?php
-
-
-class DB
+namespace DB;
+// Creates DB connector class
+class DatabaseConnector
 {
-    private static $writeDBConnection;
-    private static $readDBConnection;
 
-    public static function connectWriteDB(): PDO
+    private $dbConnection = null;
+
+    public function __construct()
     {
-        if (self::$writeDBConnection === null) {
-            self::$writeDBConnection = new PDO('mysql:host=localhost;dbname=cmp332_movies', 'root', '');
-            self::$writeDBConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            self::$writeDBConnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        }
+        // Uses .ENV to get values
+        $host = 'localhost';
+        $db   = 'cmp332_movies';
+        $username   = 'root';
 
-        return self::$writeDBConnection;
+        try {
+            // Creates a new PDO for mysql connection
+            $this->dbConnection = new \PDO(
+                "mysql:host=$host;charset=utf8mb4;dbname=$db",
+                $username,
+            );
+            // If error exit with error message
+        } catch (\PDOException $e) {
+            exit($e->getMessage());
+        }
     }
 
-    public static function connectReadDB(): PDO
+    public function getConnection()
     {
-        if (self::$readDBConnection === null) {
-            self::$readDBConnection = new PDO('mysql:host=localhost;dbname=cmp332_movies', 'root', '');
-            self::$readDBConnection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            self::$readDBConnection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        }
-        return self::$readDBConnection;
-
+        return $this->dbConnection;
     }
-
 }

@@ -3,18 +3,19 @@
 
 class Movie
 {
-    private int $_id;
-    private string $_title;
-    private int $_ageRating;
-    private float $_movieRating;
-    private string $_releaseDate;
-    private string $_description;
-    private string $_genre;
-    private string $_director;
+    public int $id;
+    public string $title;
+    public int $ageRating;
+    public float $movieRating;
+    public string $releaseDate;
+    public string $description;
+    public string $genre;
+    public string $director;
 
+    // This is the main constutor used when fetching
     /**
      * Movie constructor.
-     * @param int $_id
+     * @param int $id
      * @param string $_title
      * @param int $_ageRating
      * @param float $_movieRating
@@ -23,20 +24,40 @@ class Movie
      * @param string $_genre
      * @param string $_director
      */
-    public function __construct(int $_id, string $_title, int $_ageRating, float $_movieRating, string $_releaseDate, string $_description, string $_genre, string $_director)
+    public function __construct(int $_id, string $_title, int $_ageRating, float $_movieRating, string $_releaseDate, string $_description, string $_genre, string $_director,string $createdAt = null, string $updatedAt = null)
     {
         // Using fluent setters to allow us to easily create the class in future code.
         // We use the setters when creating the class to ensure all values are validated correctly.
-        $this->_id = $_id;
-        $this->_title = $_title;
-        $this->_ageRating = $_ageRating;
-        $this->_movieRating = $_movieRating;
-        $this->_releaseDate = $_releaseDate;
-        $this->_description = $_description;
-        $this->_genre = $_genre;
-        $this->_director = $_director;
+        $this->id = $_id;
+        $this->title = $_title;
+        $this->ageRating = $_ageRating;
+        $this->movieRating = $_movieRating;
+        $this->releaseDate = $_releaseDate;
+        $this->description = $_description;
+        $this->genre = $_genre;
+        $this->director = $_director;
+        $this->createdAt = $createdAt;
+        $this->updatedAt = $updatedAt;
     }
 
+// Function to turn this class into an array.
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'ageRating' => $this->ageRating,
+            'movieRating' => $this->movieRating,
+            'releaseDate' => $this->releaseDate,
+            'description' => $this->description,
+            'genre' => $this->genre,
+            'director' => $this->director,
+            'createdAt' => $this->createdAt,
+            'updatedAt' => $this->updatedAt,
+        ];
+    }
+
+    
     /**
      * @return int
      */

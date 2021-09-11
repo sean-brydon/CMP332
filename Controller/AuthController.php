@@ -2,15 +2,15 @@
 require_once('./Gateway/UserGateway.php');
 require_once('./Controller/ResponseController.php');
 require_once('./Helpers/Post.php');
-require_once('./Helpers/AuthManager.php');
+require_once('./Helpers/Authenticator.php');
 
 class AuthController {
     private $_userGateway;
     private $_requestMethod;
     private $_authManager;
-    public function __construct()
+    public function __construct($db)
     {
-        $this->_userGateway= new UserGateway();
+        $this->_userGateway= new UserGateway($db);
         $this->_authManager= new AuthManager();
         $this->_requestMethod = $_SERVER["REQUEST_METHOD"];
     }

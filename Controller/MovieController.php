@@ -1,20 +1,24 @@
 <?php
 require_once('./Gateway/MovieGateway.php');
-require_once('./Controller/ResponseController.php');
+
 
 class MovieController 
 {
     private $_requestMethod;
     private $_movieGateway;
-    public function __construct()
+    private $db;
+
+    public function __construct($db)
     {
         $this->_requestMethod = $_SERVER["REQUEST_METHOD"];
-        $this->_movieGateway = new MovieGateway();
-
+        $this->_movieGateway = new MovieGateway($db);
+        $this->db = $db;
     }
 
     public function handleRequest()
     {
+      $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+      $uri = explode('/', $uri);
         switch ($this->_requestMethod) {
             case 'GET':
     // TODO: Implement checking for to see if there is an id in the query array
@@ -43,7 +47,6 @@ class MovieController
             $result = $this->_movieGateway->findAll();
             if (!count($result) > 0) return ResponseController::SuccessResponse('There are no movies in the database', 200, null, false);
             $returnData = array();
-            print_r($result);
             $returnData['rows_returned'] = count($result);
             $returnData['movies'] = $result;
 
@@ -58,7 +61,8 @@ class MovieController
   public function insertOne()
   {
     try{
-      $result = $this->_movieGateway->insertOne();
+      $movie = $this->postDataToMovie();
+      $result = $this->_movieGateway->insert($movie);
       if(!$result)return  ResponseController::ErrorResponse("There has been an error with inserting data into the database",404);
 
       return ResponseController::SuccessResponse("Success",200,null,false);
@@ -66,7 +70,38 @@ class MovieController
     }catch(PDOException $expection){
       return ResponseController::ErrorResponse($expection->getMessage(),500);
     }
+  }
 
+  // function to update a movie
+  public function updateOne($id,$movie)
+  {
+    try{
+      $result = $this->_movieGateway->update($id,$movie);
+      if(!$result)return  ResponseController::ErrorResponse("There has been an error with updating data into the database",404);
+      
+    }catch(PDOException $expection){
+      return ResponseController::ErrorResponse($expection->getMessage(),500);
 
+    }
+  }
+
+  public function postDataToMovie() : array{
+    $data = json_decode(file_get_contents('php://input'), true);
+      // Create movie from $data
+      $movie = array();
+      // title, ageRating, movieRating, releaseDate, description, genre, director
+      try{
+        $movie['title'] = $data['title'];
+        $movie['ageRating'] = $data['ageRating'];
+        $movie['movieRating'] = $data['movieRating'];
+        $movie['releaseDate'] = $data['releaseDate'];
+        $movie['description'] = $data['description'];
+        $movie['genre'] = $data['genre'];
+        $movie['director'] = $data['director'];
+
+        return $movie;
+      }catch(Exception $e){
+          return ResponseController::ErrorResponse("There was an error with the data sent", 400);
+      }
   }
 }

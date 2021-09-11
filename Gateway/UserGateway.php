@@ -1,15 +1,12 @@
 <?php
 
-
-require_once('../DB.php');
-
 class UserGateway
 {
     private $_dbConnection;
 
-    public function __construct()
+    public function __construct($db)
     {
-        $this->_dbConnection = DB::connectReadDB();
+        $this->_dbConnection = $db;
     }
 
     /**

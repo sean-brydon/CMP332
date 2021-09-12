@@ -18,7 +18,7 @@ class Response
      * @param $_data
      * @param bool $_toCache
      */
-    public function __construct($_success, $_httpStatusCode, array $_messages, $_data, bool $_toCache)
+    public function __construct($_success, $_httpStatusCode, array $_messages, $_data, bool $_toCache )
     {
         $this->_success = $_success;
         $this->_httpStatusCode = $_httpStatusCode;
@@ -87,6 +87,7 @@ class Response
         return $this;
     }
 
+    // response->send();
     public function send($xmlBool = false)
     {
         // Set default content type
@@ -103,8 +104,6 @@ class Response
             header('Cache-control: no-cache,no-store');
         }
 
-        // If something is wrong with the request
-
         $this->_responseData['success'] = $this->_success;
         http_response_code($this->_httpStatusCode);
         $this->_responseData['statusCode'] = $this->_httpStatusCode;
@@ -119,18 +118,18 @@ class Response
         }
     }
 
-    private  function arrayToXML($array) 
-    { 
-        $xml = '';
+    // Array to xml
+    function arrayToXml($array, $xml = false) {
+        if ($xml === false) {
+            $xml = new SimpleXMLElement('<root/>');
+        }
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $xml .= "<$key>";
-                $xml .= $this->arrayToXML($value);
-                $xml .= "</$key>";
+                $this->arrayToXml($value, $xml->addChild($key));
             } else {
-                $xml .= "<$key>$value</$key>";
+                $xml->addChild($key, $value);
             }
         }
-        return $xml;
-    } 
+        return $xml->asXML();
+    }
 }

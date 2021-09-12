@@ -24,6 +24,16 @@ if (array_key_exists('xml', $_GET)) {
   }
 }
 
+if (array_key_exists('cache', $_GET)) {
+  if ($_GET['cache'] === 'true') {
+    // Set it to global variable
+    $GLOBALS['cache'] = true;
+  } else {
+    $GLOBALS['cache'] = false;
+  }
+}
+
+
 
 // If first param is any of the following handle request in their controllers
 if (isset($uri[2])) {

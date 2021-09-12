@@ -95,5 +95,4 @@ class MovieGateway
             return null;
         }
     }
-
 }

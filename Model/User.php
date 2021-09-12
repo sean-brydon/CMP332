@@ -25,10 +25,8 @@ class User
         $this->email = $_email;
         $this->password =$_password;
         // Set created at to the date and time the model is created
-        // TODO - validate date
         $this->createdAt = $_createdAt == null ? date('Y-m-d H:i:s') : $_createdAt;
         // Set updated at to the date and time the model is created - as this will be the value
-        // TODO - validate date
         $this->updatedAt = $_updatedAt == null ? date('Y-m-d H:i:s') : $_updatedAt;
     }
 

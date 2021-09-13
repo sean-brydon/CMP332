@@ -29,7 +29,6 @@ class MovieController
                 }
                 break;
             case 'POST':
-                Helpers::checkAuth();
                 if(Helpers::CheckAuth()){
                   $this->insertOne($this->postDataToMovie()); 
                 }else{

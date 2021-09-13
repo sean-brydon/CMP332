@@ -16,14 +16,14 @@ class AuthController {
         $this->_requestMethod = $_SERVER["REQUEST_METHOD"];
     }
     
-    function handleRequest(){
+    function checkHttpPost(){
         if($this->_requestMethod != "POST"){
             return ResponseController::ErrorResponse("There has been an error", 500);
         }
     } 
 
     public function login(){
-        $this->handleRequest();
+        $this->checkHttpPost();
         $PostBody = json_decode(file_get_contents("php://input"),true);
 
         if(!(isset($PostBody['username']) && isset($PostBody['password']))) return ResponseController::ErrorResponse("The body of this message is in the incorrect format.");
